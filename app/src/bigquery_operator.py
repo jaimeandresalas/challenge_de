@@ -30,7 +30,7 @@ class OperatorBigQuery(ABC):
                              encoding='utf-8',
                              header=None,
                              names=columns_tables[name_table],
-                             dtype=table_name[name_table], 
+                             dtype=tables_schema[name_table], 
                              on_bad_lines = 'warn',
                              storage_options={"token": "cloud"})
             df.to_gbq(table_name, if_exists='append', 
