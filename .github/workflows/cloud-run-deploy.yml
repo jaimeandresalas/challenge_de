@@ -21,6 +21,7 @@ jobs:
 
     - name: Build and Push Docker Image
       run: |
+        gcloud auth configure-docker
         docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/de-jasm-globant .
         docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/de-jasm-globant
 
@@ -29,4 +30,4 @@ jobs:
         gcloud run deploy de-jasm-globant \
           --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/de-jasm-globant \
           --platform managed \
-          --region [REGION] # Reemplaza [REGION] con la región donde deseas desplegar la aplicación.
+          --region us-central1 
