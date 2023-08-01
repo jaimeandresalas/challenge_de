@@ -11,7 +11,7 @@ Endpoints:
 from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.responses import JSONResponse
 from google.cloud import bigquery
-from src.bigquery_operator import OperatorBigQuery
+from app.src.bigquery_operator import OperatorBigQuery
 
 names_tables = {'hired_employees','departments','jobs'}
 file_location = 'gs://globant-jasm-1/data_csv/'
