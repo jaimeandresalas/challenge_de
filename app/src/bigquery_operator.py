@@ -14,14 +14,13 @@ class OperatorBigQuery(ABC):
     def insert_batch(self):
         for name_table in self.name_tables:
             table_name = self.project_id+'.'+self.dataset+'.'+name_table
-            #storage_client = storage.Client()
-            #bucket = storage_client.get_bucket('globant-jasm-1')
-            #blob = bucket.blob('data_csv/'+name_table+'.csv')
-            #blob.download_to_filename('/tmp/'+name_table+'.csv')
             location = self.files_location+name_table+'.csv'
-            df = pd.read_csv(location, sep=',', 
+            df = pd.read_csv(location, sep=',',
+                             encoding='utf-8',
+                             header=None, 
                              storage_options={"token": "cloud"})
-            df.to_gbq(table_name, if_exists='append', chunksize=1000)
+            df.to_gbq(table_name, if_exists='append', 
+                      chunksize=1000)
    
     def hired_employees_2021(self):
         with open(os.path.abspath("./src/queries/hired_employees_2021.sql"), "r") as f:
