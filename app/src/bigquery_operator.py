@@ -19,7 +19,8 @@ class OperatorBigQuery(ABC):
             #blob = bucket.blob('data_csv/'+name_table+'.csv')
             #blob.download_to_filename('/tmp/'+name_table+'.csv')
             location = self.files_location+name_table+'.csv'
-            df = pd.read_csv(location, sep=',')
+            df = pd.read_csv(location, sep=',', 
+                             storage_options={"token": "cloud"})
             df.to_gbq(table_name, if_exists='append', chunksize=1000)
    
     def hired_employees_2021(self):
