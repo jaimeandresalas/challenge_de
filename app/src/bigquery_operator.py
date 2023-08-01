@@ -14,7 +14,7 @@ class OperatorBigQuery(ABC):
     def insert_batch(self):
         for name_table in self.name_tables:
             table_name = self.project_id+'.'+self.dataset+'.'+name_table
-            df = pd.read_csv(self._files_location+name_table+'.csv')
+            df = pd.read_csv(self.files_location+name_table+'.csv')
             df.to_gbq(table_name, if_exists='append', chunksize=1000)
    
     def hired_employees_2021(self):
