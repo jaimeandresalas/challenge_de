@@ -7,11 +7,11 @@ schema = {
                         {"name": "name", 'type': 'STRING'},
                         {"name": "datetime", 'type':'STRING'},
                         {"name": "department_id", 'type': 'INTEGER'},
-                        {"name": "job_id", 'type': 'INTEGER'},},
+                        {"name": "job_id", 'type': 'INTEGER'}},
     "departments":  {{"name": "id", 'type': 'INTEGER'},
                     {"name": "departments", 'type': 'STRING'},},
     "jobs":         {{"name": "id", 'type': 'INTEGER'},
-                    {"name": "job", 'type': 'STRING'},}
+                    {"name": "job", 'type': 'STRING'}}
 }
 class OperatorBigQuery(ABC):
     def __init__(self, name_tables, files_location:str, project_id:str, dataset:str):
