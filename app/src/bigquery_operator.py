@@ -3,18 +3,17 @@ from google.cloud import bigquery
 import pandas as pd
 import os
 
-hired_employees = {{"name": "id", 'type': 'INTEGER'},
+hired_employees = [{"name": "id", 'type': 'INTEGER'},
                         {"name": "name", 'type': 'STRING'},
                         {"name": "datetime", 'type':'STRING'},
                         {"name": "department_id", 'type': 'INTEGER'},
-                        {"name": "job_id", 'type': 'INTEGER'}}
-departments ={{"name": "id", 'type': 'INTEGER'},
-                    {"name": "departments", 'type': 'STRING'},},
-jobs ={{"name": "id", 'type': 'INTEGER'},
-      {"name": "job", 'type': 'STRING'}}
-dict_tables = {'hired_employees': hired_employees,
-               'departments': departments,
-               'jobs': jobs}
+                        {"name": "job_id", 'type': 'INTEGER'}]
+departments =[{"name": "id", 'type': 'INTEGER'},
+                    {"name": "departments", 'type': 'STRING'}],
+jobs =[{"name": "id", 'type': 'INTEGER'},
+      {"name": "job", 'type': 'STRING'}]
+tables = {"hired_employees" : hired_employees, "jobs" : jobs,
+        "departments" : departments}
 class OperatorBigQuery(ABC):
     def __init__(self, name_tables, files_location:str, project_id:str, dataset:str):
         self.client = bigquery.Client()
@@ -34,7 +33,7 @@ class OperatorBigQuery(ABC):
                              storage_options={"token": "cloud"})
             df.to_gbq(table_name, if_exists='append', 
                       chunksize=1000,
-                      table_schema=dict_tables[name_table])
+                      table_schema=tables[name_table])
    
     def hired_employees_2021(self):
         with open(os.path.abspath("./src/queries/hired_employees_2021.sql"), "r") as f:
