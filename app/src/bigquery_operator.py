@@ -3,17 +3,17 @@ from google.cloud import bigquery
 import pandas as pd
 import os
 
-hired_employees = [{"name": "id", 'type': 'INTEGER'},
-                        {"name": "name", 'type': 'STRING'},
-                        {"name": "datetime", 'type':'STRING'},
-                        {"name": "department_id", 'type': 'INTEGER'},
-                        {"name": "job_id", 'type': 'INTEGER'}]
-departments =[{"name": "id", 'type': 'INTEGER'},
-                    {"name": "departments", 'type': 'STRING'}],
-jobs =[{"name": "id", 'type': 'INTEGER'},
-      {"name": "job", 'type': 'STRING'}]
-tables = {"hired_employees" : hired_employees, "jobs" : jobs,
+hired_employees = {"id":int, "name":str,"datetime":str,
+                   "department_id":int,"job_id":int}
+columns_hired_employees = ['id', 'name', 'datetime', 'department_id', 'job_id']
+departments ={ "id": int, "departments": str}
+columns_departments = ['id', 'departments']
+jobs ={"id": int, "job": str}
+columns_jobs = ['id', 'job']
+tables_schema = {"hired_employees" : hired_employees, "jobs" : jobs,
         "departments" : departments}
+columns_tables = {"hired_employees" : columns_hired_employees, "jobs" : columns_jobs,
+        "departments" : columns_departments}
 class OperatorBigQuery(ABC):
     def __init__(self, name_tables, files_location:str, project_id:str, dataset:str):
         self.client = bigquery.Client()
@@ -28,12 +28,13 @@ class OperatorBigQuery(ABC):
             location = self.files_location+name_table+'.csv'
             df = pd.read_csv(location, sep=',',
                              encoding='utf-8',
-                             header=None, 
+                             header=None,
+                             names=columns_tables[name_table],
+                             dtype=table_name[name_table], 
                              on_bad_lines = 'warn',
                              storage_options={"token": "cloud"})
             df.to_gbq(table_name, if_exists='append', 
-                      chunksize=1000,
-                      table_schema=tables[name_table])
+                      chunksize=1000)
    
     def hired_employees_2021(self):
         with open(os.path.abspath("./src/queries/hired_employees_2021.sql"), "r") as f:
