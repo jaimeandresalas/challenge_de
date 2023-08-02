@@ -34,8 +34,8 @@ class OperatorBigQuery(ABC):
                     autodetect = True,
                     max_bad_records = 1000
                     )
-            job = self.client.load_table_from_uri(location=location, 
-                                                  table_name = table_name, 
+            job = self.client.load_table_from_uri(location, 
+                                                  table_name, 
                                                   job_config=job_config)
             job.result()  
 
