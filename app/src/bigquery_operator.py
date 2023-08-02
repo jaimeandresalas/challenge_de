@@ -3,17 +3,21 @@ from google.cloud import bigquery
 import pandas as pd
 import os
 
-"""hired_employees = {"id":int, "name":str,"datetime":str,
-                   "department_id":int,"job_id":int}
-columns_hired_employees = ['id', 'name', 'datetime', 'department_id', 'job_id']
-departments ={ "id": int, "department": str}
-columns_departments = ['id', 'department']
-jobs ={"id": int, "job": str}
-columns_jobs = ['id', 'job']
-tables_schema = {"hired_employees" : hired_employees, "jobs" : jobs,
-        "departments" : departments}
-columns_tables = {"hired_employees" : columns_hired_employees, "jobs" : columns_jobs,
-        "departments" : columns_departments}"""
+schema_hired_employees = [bigquery.SchemaField("id", "INTEGER"),
+                          bigquery.SchemaField("name", "STRING"), 
+                          bigquery.SchemaField("datetime", "STRING"), 
+                          bigquery.SchemaField("department_id", "INTEGER"),
+                          bigquery.SchemaField("job_id", "INTEGER")]
+
+schema_departments = [bigquery.SchemaField("id", "INTEGER"),
+                      bigquery.SchemaField("department", "STRING")]
+
+schema_jobs = [bigquery.SchemaField("id", "INTEGER"),
+               bigquery.SchemaField("job", "STRING")]
+
+schemas = {'hired_employees': schema_hired_employees,
+              'departments': schema_departments,
+                'jobs': schema_jobs}
 
 class OperatorBigQuery(ABC):
     def __init__(self, name_tables, files_location:str, project_id:str, dataset:str):
@@ -31,7 +35,7 @@ class OperatorBigQuery(ABC):
                     skip_leading_rows=0,
                     source_format=bigquery.SourceFormat.CSV,
                     write_disposition="WRITE_APPEND",
-                    autodetect = True,
+                    schema=schemas[name_table],
                     max_bad_records = 1000
                     )
             job = self.client.load_table_from_uri(location, 
