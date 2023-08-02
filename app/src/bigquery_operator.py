@@ -40,7 +40,7 @@ class OperatorBigQuery(ABC):
                     job_config = bigquery.LoadJobConfig(
                          write_disposition="WRITE_APPEND",
                          autodetect = True,
-                         ignoreUnknownValues = True,
+                         #ignoreUnknownValues = True,
                          max_bad_records = 1000
                          )
                     job = self.client.load_table_from_dataframe(df, table_name, job_config=job_config)
