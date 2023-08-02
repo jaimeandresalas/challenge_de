@@ -30,8 +30,8 @@ class OperatorBigQuery(ABC):
             with pd.read_csv(location, sep=',',
                              encoding='utf-8',
                              header=None,
-                             names=columns_tables[name_table],
-                             dtype=tables_schema[name_table], 
+                             #names=columns_tables[name_table],
+                             #dtype=tables_schema[name_table], 
                              chunksize=1000,
                              on_bad_lines = 'warn',
                              storage_options={"token": "cloud"}) as reader:
