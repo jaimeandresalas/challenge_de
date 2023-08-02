@@ -14,6 +14,7 @@ tables_schema = {"hired_employees" : hired_employees, "jobs" : jobs,
         "departments" : departments}
 columns_tables = {"hired_employees" : columns_hired_employees, "jobs" : columns_jobs,
         "departments" : columns_departments}
+
 class OperatorBigQuery(ABC):
     def __init__(self, name_tables, files_location:str, project_id:str, dataset:str):
         self.client = bigquery.Client()
@@ -33,9 +34,13 @@ class OperatorBigQuery(ABC):
                              dtype=tables_schema[name_table], 
                              on_bad_lines = 'warn',
                              storage_options={"token": "cloud"})
-            df.to_gbq(table_name, if_exists='append', 
-                      chunksize=1000)
-   
+            job_config = bigquery.LoadJobConfig(
+                         write_disposition="WRITE_APPEND",
+                         autodetect = True
+                         )
+            job = self.client.load_table_from_dataframe(df, table_name, job_config=job_config)
+            job.result()  
+    
     def hired_employees_2021(self):
         with open(os.path.abspath("./src/queries/hired_employees_2021.sql"), "r") as f:
             sql = f.read()
