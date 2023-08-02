@@ -14,7 +14,7 @@ from google.cloud import bigquery
 from app.src.bigquery_operator import OperatorBigQuery
 
 names_tables = {'hired_employees','departments','jobs'}
-file_location = 'gcs://globant-jasm-1/data_csv/'
+file_location = 'gs://globant-jasm-1/data_csv/'
 project_id = 'de-jasm-globant'
 dataset = 'globant_dataset'
 app = FastAPI()
